@@ -1,0 +1,168 @@
+# Projeto Playwright — Exemplo de Preenchimento de Formulário
+---
+
+## Estrutura Final do Projeto
+```
+playwright-form-example/
+│
+├── package.json
+├── playwright.config.ts
+├── README.md
+│
+├── tests/
+│   └── form.spec.ts
+│
+└── utils/
+    └── selectors.ts
+```
+
+---
+
+## package.json
+```json
+{
+  "name": "playwright-form-example",
+  "version": "1.0.0",
+  "description": "Projeto simples Playwright preenchendo um formulário de teste.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}
+```
+
+---
+
+## playwright.config.ts
+```ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  use: {
+    headless: true,
+    viewport: { width: 1280, height: 720 },
+  }
+});
+```
+
+---
+
+## utils/selectors.ts
+```ts
+export const FormSelectors = {
+  name: '#et_pb_contact_name_0',
+  email: '#et_pb_contact_email_0',
+  message: '#et_pb_contact_message_0',
+  submit: '.et_pb_contact_submit',
+  success: '.et-pb-contact-message'
+};
+```
+
+---
+
+## tests/form.spec.ts
+```ts
+import { test, expect } from '@playwright/test';
+import { FormSelectors } from '../utils/selectors';
+
+// Site de formulário público utilizado no exemplo:
+// https://www.saucedemo.com/testimonials (não possui formulário funcional)
+// Portanto, utilizaremos este formulário público de testes:
+// https://www.richardson.com.br/formulario-exemplo (caso não carregue, utilize outro formulário público de teste)
+
+// Para garantir estabilidade, usamos o formulário de testes da Divi:
+// https://divi-contact-form.divi-seo.com/
+const FORM_URL = 'https://divi-contact-form.divi-seo.com/';
+
+// Dados fictícios
+const dados = {
+  nome: 'Rayssa Christina Rodrigues',
+  email: 'rayssa.teste@example.com',
+  telefone: '31999999999',
+  mensagem: 'Preenchimento de teste automático via Playwright.'
+};
+
+test('Preenchimento de formulário com Playwright', async ({ page }) => {
+  await page.goto(FORM_URL);
+
+  await page.fill(FormSelectors.name, dados.nome);
+  await page.fill(FormSelectors.email, dados.email);
+  await page.fill(FormSelectors.message, dados.mensagem);
+
+  await page.click(FormSelectors.submit);
+
+  await expect(page.locator(FormSelectors.success)).toBeVisible({ timeout: 8000 });
+});
+```
+
+---
+
+## README.md
+```md
+# Projeto Playwright — Preenchimento Automático de Formulário
+
+Este projeto demonstra como utilizar Playwright para preencher automaticamente um formulário público e validar a submissão.
+
+## Tecnologias
+- Node.js
+- Playwright
+- TypeScript
+
+---
+
+## Instalação
+```bash
+npm install
+npx playwright install
+```
+
+---
+
+## Como Rodar os Testes
+```bash
+npm test
+```
+
+---
+
+## Fluxo Automatizado
+1. Acessa um formulário público de testes.
+2. Preenche nome, email e mensagem.
+3. Envia o formulário.
+4. Valida se a mensagem de sucesso foi exibida.
+
+---
+
+## Estrutura
+```
+playwright-form-example/
+  tests/form.spec.ts
+  utils/selectors.ts
+  playwright.config.ts
+  package.json
+  README.md
+```
+
+---
+
+## Como Subir no GitHub
+
+1. Crie um repositório vazio no GitHub.
+2. No terminal, dentro da pasta do projeto:
+```bash
+git init
+git add .
+git commit -m "Projeto Playwright - Formulário Automático"
+git branch -M main
+git remote add origin https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git
+git push -u origin main
+```
+
+---
+
+Projeto pronto para uso e publicação.
+```
+
